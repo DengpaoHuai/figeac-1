@@ -1,4 +1,5 @@
 const app = document.getElementById("app");
+let page = 1;
 
 const displayPlanet = (planet) => {
   const div = document.createElement("div");
@@ -8,20 +9,37 @@ const displayPlanet = (planet) => {
   app.appendChild(div);
 };
 
-fetch("https://swapi.dev/api/planets")
-  .then((response) => response.json())
-  .then((data) => {
-    data.results.forEach((element) => {
-      displayPlanet(element);
-    });
-  })
-  .catch((err) => console.log(err));
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const getData = async () => {
-  const response = await fetch("https://swapi.dev/api/planets");
+const getData = async (page = 1) => {
+  await sleep(2000);
+  const response = await fetch("https://swapi.dev/api/planets?page=" + page);
   const data = await response.json();
-  console.log(data);
+  app.innerHTML = "";
+  data.results.forEach((planet) => {
+    displayPlanet(planet);
+  });
+  displayButtons();
 };
+
+const displayButtons = () => {
+  const buttonPrevious = document.createElement("button");
+  buttonPrevious.innerText = "Previous";
+  buttonPrevious.addEventListener("click", () => {
+    page--;
+    getData(page);
+  });
+  app.appendChild(buttonPrevious);
+  const button = document.createElement("button");
+  button.innerText = "Next";
+  button.addEventListener("click", () => {
+    page++;
+    getData(page);
+  });
+  app.appendChild(button);
+};
+
+displayButtons();
 
 try {
   getData();
