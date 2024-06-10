@@ -62,7 +62,38 @@ const addBook = (id, title, author, price, rating, available) => {
 
 addBook(7, "The", "Kane", 40, 4.9, true);
 
-//books.forEach((book) => console.log(book));
+const app = document.getElementById("app");
+
+books.forEach((book) => {
+  const div = document.createElement("div");
+  const h2 = document.createElement("h2");
+  h2.innerText = book.title;
+  div.appendChild(h2);
+  const button = document.createElement("button");
+  button.innerText = "Edit";
+  button.addEventListener("click", (e) => console.log(e));
+  div.appendChild(button);
+  app.appendChild(div);
+});
 
 const customFind = (search) =>
-  books.filter((book) => book.title.includes(search));
+  books.find((book) => book.title.includes(search));
+
+document.addEventListener("scroll", (e) => console.log(e));
+
+const searchForm = document.getElementById("searchForm");
+searchForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  /* const search = document.getElementById("search");
+  console.log(search.value);*/
+  /*
+  const valie = searchForm.search.value;
+  console.log(valie);*/
+
+  const formData = new FormData(e.target);
+  const values = Object.fromEntries(formData);
+  console.log(values);
+
+  app.innerHTML = "";
+  console.log(customFind(values.search));
+});
