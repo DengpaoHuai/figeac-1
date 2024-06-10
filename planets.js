@@ -1,6 +1,12 @@
 const app = document.getElementById("app");
 let page = 1;
 
+const displayLoader = () => {
+  const loader = document.createElement("div");
+  loader.classList.add("loader");
+  app.appendChild(loader);
+};
+
 const displayPlanet = (planet) => {
   const div = document.createElement("div");
   const h2 = document.createElement("h2");
@@ -12,23 +18,25 @@ const displayPlanet = (planet) => {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const getData = async (page = 1) => {
-  await sleep(2000);
+  app.innerHTML = "";
+  displayLoader();
   const response = await fetch("https://swapi.dev/api/planets?page=" + page);
   const data = await response.json();
   app.innerHTML = "";
   data.results.forEach((planet) => {
     displayPlanet(planet);
   });
-  displayButtons();
+  displayButtons(data);
 };
 
-const displayButtons = () => {
+const displayButtons = (planetResponse) => {
   const buttonPrevious = document.createElement("button");
   buttonPrevious.innerText = "Previous";
   buttonPrevious.addEventListener("click", () => {
     page--;
     getData(page);
   });
+  buttonPrevious.disabled = planetResponse.previous ? false : true;
   app.appendChild(buttonPrevious);
   const button = document.createElement("button");
   button.innerText = "Next";
@@ -36,10 +44,9 @@ const displayButtons = () => {
     page++;
     getData(page);
   });
+  button.disabled = planetResponse.next ? false : true;
   app.appendChild(button);
 };
-
-displayButtons();
 
 try {
   getData();
