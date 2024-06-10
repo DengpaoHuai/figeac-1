@@ -64,7 +64,7 @@ addBook(7, "The", "Kane", 40, 4.9, true);
 
 const app = document.getElementById("app");
 
-books.forEach((book) => {
+const displayBook = (book) => {
   const div = document.createElement("div");
   const h2 = document.createElement("h2");
   h2.innerText = book.title;
@@ -74,10 +74,13 @@ books.forEach((book) => {
   button.addEventListener("click", (e) => console.log(e));
   div.appendChild(button);
   app.appendChild(div);
+};
+books.forEach((book) => {
+  displayBook(book);
 });
 
 const customFind = (search) =>
-  books.find((book) => book.title.includes(search));
+  books.filter((book) => book.title.includes(search));
 
 document.addEventListener("scroll", (e) => console.log(e));
 
@@ -95,5 +98,8 @@ searchForm.addEventListener("submit", (e) => {
   console.log(values);
 
   app.innerHTML = "";
-  console.log(customFind(values.search));
+  const bookAvecUnS = customFind(values.search);
+  bookAvecUnS.forEach((book) => {
+    displayBook(book);
+  });
 });
