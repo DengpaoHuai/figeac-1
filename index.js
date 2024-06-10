@@ -48,3 +48,21 @@ const books = [
     available: true,
   },
 ];
+
+const addBook = (id, title, author, price, rating, available) => {
+  books.push({
+    id: id,
+    title: title,
+    author: author,
+    price,
+    rating,
+    available,
+  });
+};
+
+addBook(7, "The", "Kane", 40, 4.9, true);
+
+//books.forEach((book) => console.log(book));
+
+const customFind = (search) =>
+  books.filter((book) => book.title.includes(search));
